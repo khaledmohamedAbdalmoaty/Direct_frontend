@@ -1,0 +1,1 @@
+export  let errorStyle=(err)=>{return err?{"height": "500px"}:{"height":"400px"}}
