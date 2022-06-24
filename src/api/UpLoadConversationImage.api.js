@@ -7,9 +7,7 @@ const IMG_URL=process.env.REACT_APP_IMG_URL
 const UploadImageToMulter=async (file)=>{
     if(file){
         const data=new FormData()
-        const fileName=Date.now()+file.name
         data.append('image',file)
-        data.append('name',fileName)
         const result=await axios.post(`${API_URL}/upLoadFile/single`,data)
 /*         console.log(`result upload Image submit 1  ${JSON.stringify(result.data)}`)
  */        return result.data
@@ -17,11 +15,15 @@ const UploadImageToMulter=async (file)=>{
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                               axios requests                               */
+/* -------------------------------------------------------------------------- */
 
-const  axiosAddConversationMsg=async ({channelId,userId,imageLocaton,imageCaption})=>{
+const  axiosAddUploadImageMsg=async ({channelId,userId,imageName,imageCaption})=>{
     const newConversationMsg={
-        ImageEnable:true,
-        uploadedImage:{ imageLocaton:IMG_URL+imageLocaton,imageCaption},
+        channelId,
+        uploadedImageEnable:true,
+        uploadedImage:{ imageLocaton:IMG_URL+`/${imageName}`,imageCaption},
         whoSendMsg:userId,
       }
       console.log(`result upload Image submit 2 => ${newConversationMsg.uploadedImage.imageLocaton}`)
@@ -30,12 +32,13 @@ const  axiosAddConversationMsg=async ({channelId,userId,imageLocaton,imageCaptio
 }
 
 
+/* ---------------------- use upload conversaton image ---------------------- */
 export function  useUpLoadConversationImage(){
   const queryClient = useQueryClient()
 
-  return useMutation(axiosAddConversationMsg,{
+  return useMutation(axiosAddUploadImageMsg,{
       onSuccess:(newMessage)=>{
-          queryClient.invalidateQueries('getChannelConversation')
+           queryClient.invalidateQueries('getChannelConversation') 
       /*  queryClient.setQueryData(['getChannelConversation',channelId],(oldQueryData)=>{
               return {
                   ...oldQueryData,
@@ -47,11 +50,7 @@ export function  useUpLoadConversationImage(){
       
 }
 
-
-
-
-
-
+/* ----------------------------- use upload post ---------------------------- */
 
 export default UploadImageToMulter
 

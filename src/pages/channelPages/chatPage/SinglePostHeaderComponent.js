@@ -26,7 +26,7 @@ import {Tooltip,Avatar,TextField}  from '@mui/material'
 import {actionTypes} from '../../../contexts'
 
 
-const ChatHeaderComponent = ({channelName,channelImageLocation}) => {
+const SinglePostHeaderComponent = ({channelName,channelImageLocation}) => {
   return (
 
       <div className="chat__header">
@@ -35,9 +35,6 @@ const ChatHeaderComponent = ({channelName,channelImageLocation}) => {
             <h3>{channelName}</h3>
           </div>  
           <div className="chat__headerRight">
-              <SearchComponent/>
-              <CreatePostComponent/>
-              <UploadImageComponent  />
             <ShowListComponent options={[actionTypes.CREATEPOST,actionTypes.SHOWCHANNELS]}/>
           </div>
       </div>
@@ -45,4 +42,4 @@ const ChatHeaderComponent = ({channelName,channelImageLocation}) => {
   )
 }
 
-export default  ChatHeaderComponent
+export default   SinglePostHeaderComponent

@@ -5,6 +5,7 @@ const  axiosAddConversationMsg=async ({channelId,message,userId})=>{
       const newConversationMsg={
         message:message,
         whoSendMsg:userId,
+        channelId
         }
         console.log(`who sendMsg from msg.api ${newConversationMsg.whoSendMsg}`)
       return await axios.post(`${API_URL}/chat/new/conversationMsg?id=${channelId}`,newConversationMsg)
@@ -14,7 +15,6 @@ const  axiosAddConversationMsg=async ({channelId,message,userId})=>{
 
 const useAddNewConversationMsg=(channelId)=>{
     const queryClient = useQueryClient()
-
     return useMutation(axiosAddConversationMsg,{
         onSuccess:(newMessage)=>{
             queryClient.invalidateQueries('getChannelConversation')
@@ -28,7 +28,5 @@ const useAddNewConversationMsg=(channelId)=>{
     })
         
 }
+
 export default  useAddNewConversationMsg
-
-
-

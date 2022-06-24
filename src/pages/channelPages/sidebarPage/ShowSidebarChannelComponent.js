@@ -10,9 +10,12 @@ import ShowListComponent from '../ShowListComponent';
 
 export default function ShowSidebarChannelComponent({channel}) {
     let nav=useNavigate()
-  const {name:channelName,channelImageLocation,id}=channel
+  const {name:channelName,channelImageLocation,id,postOnly}=channel
   const selectChannel = () => {
-    if (id) {
+    if(postOnly){
+      nav(`/channel/postOnly/${channelName}/${id}`)
+    }
+    else if (id) {
         nav(`/channel/${channelName}/${id}`)
     } else {
         nav('/login');
@@ -26,7 +29,7 @@ export default function ShowSidebarChannelComponent({channel}) {
         p:'0px',
         }} onClick={selectChannel}>
       {/* <CssBaseline /> */}
-      <List>
+       <List> 
           <ListItem button>
               <Avatar  alt="channel Picture" src={channelImageLocation} />
             <ListItemAvatar >
@@ -35,7 +38,7 @@ export default function ShowSidebarChannelComponent({channel}) {
             <ShowListComponent options={['setPriority of channel ']}/>
           </ListItem>
          
-      </List> 
+       </List>  
 
     </Box>
   );

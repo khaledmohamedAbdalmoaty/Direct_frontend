@@ -5,19 +5,40 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { OptionUnstyled } from '@mui/base';
 
+/* -------------------------------------------------------------------------- */
+/*              import different custom component from chatPages              */
+/* -------------------------------------------------------------------------- */
+import CreatePostComponent from './chatPage/CreatePostComponent'
+
+/* -------------------------------------------------------------------------- */
+/*                             import from context                            */
+/* -------------------------------------------------------------------------- */
+
+import {actionTypes} from '../../contexts'
+
+/* -------------------------------------------------------------------------- */
+/*                     import things from react router dom                    */
+/* -------------------------------------------------------------------------- */
+import { useNavigate} from 'react-router-dom';
 
 
 const ITEM_HEIGHT = 48;
 
 export default function ShowListComponent({options}) {
+  let nav=useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     console.log(`event.currentTarget=>${event.currentTarget}`)
   };
-  const handleClose = (option) => {
-    setAnchorEl(null);
+  const handleClose = (option) => {    
+    if(option===actionTypes.CREATENEWCHANNEL){
+      console.log( `show list component => ${option}`)
+      nav(`/channel/createChannel`)
+    }
+
+    setAnchorEl(null); 
   };
 
   return (
@@ -30,7 +51,7 @@ export default function ShowListComponent({options}) {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <MoreVertIcon />
+         <MoreVertIcon />
       </IconButton>
       <Menu
         id="long-menu"
@@ -48,7 +69,7 @@ export default function ShowListComponent({options}) {
         }}
       >
         {options.map((option) => (
-          <MenuItem key={option} selected={option === 'Pyxis'} onClick={()=>handleClose(option)}>
+          <MenuItem key={option+Date.now()} selected={option === 'Pyxis'} onClick={()=>handleClose(option)}>
             {option}
           </MenuItem>
         ))}

@@ -6,6 +6,11 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import ShowListComponent from '../ShowListComponent'
 
+/* -------------------------------------------------------------------------- */
+/*                         improt from context folder                         */
+/* -------------------------------------------------------------------------- */
+import {actionTypes} from '../../../contexts'
+
 
 export default function SidebarHeaderComponent() {
   
@@ -17,7 +22,7 @@ export default function SidebarHeaderComponent() {
       <Avatar alt="Profile Picture" src={'/public/'} />
     </ListItemAvatar>
     <ListItemText primary={"room Name"} secondary={'last seen in '} />
-    <ShowListComponent options={['add a new channel']}/>
+    <ShowListComponent options={[actionTypes.CREATENEWCHANNEL]}/>
   </ListItem>
 </List>
     

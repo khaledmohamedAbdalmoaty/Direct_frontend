@@ -27,7 +27,10 @@ import useAddNewConversationMsg from '../../../api/SendConversatonMsg.api'
 /* -------------------------------------------------------------------------- */
 import ChatHeaderComponent from './ChatHeaderComponent'
 import ChatBodyComponent from './ChatBodyComponent'
-
+import ChatMessageComponent  from './ChatMessageComponent'
+import PostComponent from './PostComponent'
+import ChatShowUploadedImageComponent from './ChatShowUploadedImageComponent'
+import CreatePostComponent from './CreatePostComponent'
 /* -------------------------------------------------------------------------- */
 /*                     import form materila ui version 5                     */
 /* -------------------------------------------------------------------------- */
@@ -39,7 +42,7 @@ import {useStateValue} from '../../../contexts/StateProvider'
 
 
 
-function Chat() {
+function ShowOnlyPostsComponent() {
   //addNewMsg(channelId,inputRef.current.value,userId)
   const inputRef=useRef()
   const[state,setState]=useState(false)
@@ -77,20 +80,18 @@ function Chat() {
   return (
     <div className="chat">
         <ChatHeaderComponent channelName={channelName} ChannelImageLocation={channelImageLocation}/>
-        <ChatBodyComponent  conversation={conversation}/>
-
-      
-
-        {/*  chat footer */}
-        <div className="chat__footer">
-            <form >
-              <input  ref={inputRef} placeholder='Type a message' type="text"/>
-              <button  onClick={handleAddMsg} type="submit" >send Message</button>
-            </form>
-        </div>
-
+    <div className="chat__body" >
+     
+   {
+     conversation.map((msg,index)=>(
+        msg.postEnable && msg.post && (<PostComponent key={Date.now()+index} post={msg.post} userInfo={msg.whoSendMsg}/>)
+      ))
+   }
+        
+    </div>
+            
     </div>
   )
 }
 
-export default Chat
+export default ShowOnlyPostsComponent

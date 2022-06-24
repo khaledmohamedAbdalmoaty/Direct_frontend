@@ -26,40 +26,43 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { useNavigate} from 'react-router-dom';
 
-const PostComponent = ({post}) => {
+import {ReturnDate} from '../../../common/ReturnDate'
+
+
+const PostComponent = ({post,userInfo}) => {
   const nav=useNavigate()
   const handleShowComments=()=>{
     nav(`/channel/singlePost/${post._id}`)
   }
 
+
   return (
-   
+   <>
     <Card  sx={{margin:"20px"}}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: "red" }} aria-label="recipe" src={post.postImageUrl}>
-            post
-          </Avatar>
+          <Avatar sx={{ bgcolor: "red" }} aria-label="recipe" src={userInfo.profilePicture}/>
         }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title="person who send post"
-        subheader="September 14, 2016"
+        title={userInfo.username}
+        subheader={post.timestamp && ReturnDate(post.timestamp)  }
       />
 
       <CardMedia
         component="img"
         height="20%"
-        image={post.postImageUrl}
+        image={post.imageLocation}
+        crossOrigin="anonymous" 
         alt="Image "
       />
 
       <CardContent>
         <Typography variant="body2" sx={{fontSize:"20px"}} color="text.secondary">
-         {post.postDescription}
+         {post.desc}
         </Typography>
       </CardContent>
 
@@ -67,14 +70,14 @@ const PostComponent = ({post}) => {
         <IconButton aria-label="add to favorites">
         <Checkbox  icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{color:"red"}}/>} />
         </IconButton>
-        <IconButton aria-label="share">
-           
-        <Button color="secondary" onClick={handleShowComments} startIcon={<AddCommentIcon/>}>Add comment or show comments</Button>
-        </IconButton>
+        
+        <Button color="secondary" onClick={handleShowComments}  startIcon={<AddCommentIcon/>}>Add comment </Button> 
+        
+      
       </CardActions>
 
-
     </Card>
+    </>
   )
 }
 

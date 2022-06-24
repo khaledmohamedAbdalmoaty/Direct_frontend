@@ -6,41 +6,40 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
+import { PermPhoneMsgOutlined } from '@mui/icons-material';
+
 /* -------------------------------------------------------------------------- */
 /*                  import things related to global variable                  */
 /* -------------------------------------------------------------------------- */
-import {useStateValue} from '../../../contexts/StateProvider'
-import { PermPhoneMsgOutlined } from '@mui/icons-material';
+import {useStateValue} from '../../../contexts'
 
 /* -------------------------------------------------------------------------- */
 /*                         import adjust date function                        */
 /* -------------------------------------------------------------------------- */
 import {ReturnDate} from '../../../common/ReturnDate'
 
-export default function ChatMessageComponent({conversation}) {
+export default function ChatMessageComponent({msg,index}) {
   const [{ user }, dispatch] = useStateValue();
-  console.log(`from chat message Component conversation => ${conversation[0]}`)
+ /*  console.log(` from chat message compoent ${msg.message}`)
+  console.log(` from chat message compoent ${msg.timestamp}`) */
+
+ 
   return (
+    
     <Box sx={{ pb: 7 }} >
-      <>
-      <CssBaseline />
-      <List>
-        
-        {conversation.map((msg, index) => (
-          <p key={index + msg.timestamp} className={`chat__message ${(msg.whoSendMsg===user.uid) && 'chat__receiver'}`}>
+    
+          <div style={{maxWidth:"300px",overflow:'scroll'}}  className={`chat__message ${(msg.whoSendMsg._id===user.user_id) && 'chat__receiver'}`}>
             <ListItem >
               <ListItemAvatar>
-                <Avatar alt="Profile Picture" src='alsjdflkj' />
+                <Avatar alt="Profile Picture" src={msg.whoSendMsg.profilePicture && msg.whoSendMsg.profilePicture } />
               </ListItemAvatar>
-              <ListItemText primary={'khaled abdalmoaty'} secondary={msg.timestamp && ReturnDate(msg.timestamp)}/>
+               <ListItemText primary={msg.whoSendMsg.username} secondary={msg.timestamp && ReturnDate(msg.timestamp)}/>
             </ListItem>
             {msg.message} 
-          </p> 
-        ))}
-
-
-      </List>
-      </>
+          </div> 
     </Box>
+   
   );
 }
+
+
