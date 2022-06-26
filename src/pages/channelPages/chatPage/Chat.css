@@ -1,12 +1,15 @@
 .chat {
     display: flex;
     flex-direction: column;
-    flex: 0.9;
+    flex: 1;
+   
 }
 
 
 .chat__header {
-    padding: 20px;
+   /*  padding: 20px; */
+   width:auto;
+   padding: 10px;
     display: flex;
     align-items: center;
     border-bottom: 1px solid lightgray;
@@ -34,7 +37,7 @@
     background-image: url("../333.webp");
     background-repeat: repeat;
     background-position: center;
-    padding: 30px;
+     padding: 30px; 
     overflow: scroll;
 }
 
@@ -92,4 +95,4 @@
 .chat__footer>.MuiSvgIcon-root {
     padding: 10px;
     color: gray;
-}  */
+}   */

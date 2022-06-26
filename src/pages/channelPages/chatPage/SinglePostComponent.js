@@ -37,7 +37,8 @@ const SinglePostComponent = () => {
     
    
 
-    const handleAddComment=()=>{
+    const handleAddComment=(e)=>{
+      e.preventDefault()
       const channelId=post.channelId._id 
       const postId=post._id 
       const message=inputRef.current.value
@@ -84,7 +85,8 @@ const SinglePostComponent = () => {
   return (
     <div className="chat">
      
-       
+{/*      <SinglePostHeaderComponent userId={post.userId._id} channelId={post.channelId._id} channelName={post.channelId.channelName} channelImageLocation={post.channelId.channelImageLocation}/>
+ */}
         <div className="chat__body" >
           <PostComponent post={post} userInfo={post.userId}/> 
 
@@ -98,9 +100,12 @@ const SinglePostComponent = () => {
 
        {/*  footer */}
         <div className="chat__footer">
-            <form>
+            <form onSubmit={e=>{
+            e.preventDefault()
+            handleAddComment(e)
+            }}>
               <input  ref={inputRef} placeholder='Add comment' type="text"/>
-              <button  onClick={handleAddComment} type="submit">send Message</button>
+              <button   type="submit" />
             </form>
         </div>
     </div>

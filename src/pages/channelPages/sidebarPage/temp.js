@@ -25,8 +25,6 @@ import ShowSidebarChannelComponent from './ShowSidebarChannelComponent'
 import SidebarHeaderComponent from './SidebarHeaderComponent'
 import SearchComponent from '../SearchComponent'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-import Box from '@mui/material/Box';
-
 /* --------------------- import get user channel request -------------------- */
 import useGetUserChannel from '../../../api/getUserChannel.api'
 
@@ -51,7 +49,6 @@ function Sidebar() {
 
   //const [{user}]=useStateValue()
   return (
-    <Box>
     <div className="sidebar">
         <div className="sidebar__header">
           <SidebarHeaderComponent/> 
@@ -66,7 +63,6 @@ function Sidebar() {
       </div>
 
     </div>
-    </Box>
   )
 }
 
