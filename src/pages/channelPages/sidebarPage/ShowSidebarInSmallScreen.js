@@ -45,46 +45,9 @@ import MailIcon from '@mui/icons-material/Mail';
 /*                           get side bar component                           */
 /* -------------------------------------------------------------------------- */
 
-/* import Sidebar from './Sidebar' */
+import Sidebar from './Sidebar' 
 
-
-
-
-function Sidebar() {
-  const [{ user }, dispatch] = useStateValue();
-  const userId=user.uid
-  const {data:channels,isLoading,isFetching,error,isError,refetch}=useGetUserChannel(userId)
-
-  if(isLoading){
-    return <h2>Loading ...</h2> 
-  }
-
-  if(isError){
-    console.log(error)
-    return (
-    <h2>{ error.message}</h2>)
-  }
-
-  //const [{user}]=useStateValue()
-  return (
-    <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-    <div className="sidebar">
-        <div className="sidebar__header">
-          <SidebarHeaderComponent/> 
-        </div>
-     {/* ----------------------------- search Icon  ---------------------------- */ }
-        <SearchComponent/>
-      {/* ---------------------------- show all channel ---------------------------- */ }
-      <div className="sidebar__chats">
-        {
-         channels.map((channel)=>(<ShowSidebarChannelComponent key={channel.id} channel={channel} />))
-         }       
-      </div>
-
-    </div>
-    </Box>
-  )
-}
+ 
 
 
 
@@ -121,12 +84,12 @@ export default function TemporaryDrawer() {
   );
 
   return (
-    <Box>
+    <Box  >
     <div>
-     {['left'].map((anchor) => ( 
+     {['channels'].map((anchor) => ( 
    
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <Button sx={{ my: 2, color: 'black', display: 'block' }} onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
           <Drawer
             anchor={anchor}
             open={state[anchor]}

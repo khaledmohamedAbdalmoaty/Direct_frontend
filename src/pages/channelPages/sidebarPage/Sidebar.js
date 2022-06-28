@@ -50,8 +50,7 @@ function Sidebar() {
   }
 
   //const [{user}]=useStateValue()
-  return (
-    <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+  return (  
     <div className="sidebar">
         <div className="sidebar__header">
           <SidebarHeaderComponent/> 
@@ -66,7 +65,7 @@ function Sidebar() {
       </div>
 
     </div>
-    </Box>
+
   )
 }
 

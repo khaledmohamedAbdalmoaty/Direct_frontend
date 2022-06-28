@@ -1,0 +1,9 @@
+#!/bin/bash
+
+git status 
+
+git add . 
+
+git commit -m "new_update"
+
+git push origin master
