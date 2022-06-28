@@ -20,6 +20,11 @@ import CreatePostComponent from './CreatePostComponent'
 /* -------------------------------------------------------------------------- */
 import {Tooltip,Avatar,TextField}  from '@mui/material'
 
+import ShowSidebarInSmallScreen from '../sidebarPage/ShowSidebarInSmallScreen'
+
+import Box from '@mui/material/Box';
+
+
 /* -------------------------------------------------------------------------- */
 /*                  import things related to global variable                  */
 /* -------------------------------------------------------------------------- */
@@ -34,12 +39,16 @@ const ChatHeaderComponent = ({channelName,channelImageLocation}) => {
           <div className="chat__headerInfo">
             <h3>{channelName}</h3>
           </div>  
+          
           <div className="chat__headerRight">
-              <SearchComponent/>
+             {/*  <SearchComponent/> */}
               <CreatePostComponent/>
+              <ShowSidebarInSmallScreen/>
               <UploadImageComponent  />
-            <ShowListComponent options={[actionTypes.CREATEPOST,actionTypes.SHOWCHANNELS]}/>
-          </div>
+{/*             <ShowListComponent options={[actionTypes.CREATEPOST,actionTypes.SHOWCHANNELS]}/>
+ */}          </div>
+
+         
       </div>
   
   )

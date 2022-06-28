@@ -24,6 +24,13 @@ import Login from "./pages/login/Login" ;
 import Register from "./pages/register/Register";
 import ResetPassword from "./pages/resetPassword/ResetPassword"; 
 import Try from './Try'
+
+/* -------------------------------------------------------------------------- */
+/*                            import from MainPage                            */
+/* -------------------------------------------------------------------------- */
+
+import MainPageComponent from './pages/MainPage'
+
 /* -------------------------------------------------------------------------- */
 /*                import things related to react router dom v6                */
 /* -------------------------------------------------------------------------- */
@@ -67,7 +74,7 @@ function App() {
                   <PrivateRoute exact path="/" element={<Login/>} /> 
                 <PrivateRoute path="/update-profile" element={UpdateProfile} /> 
               <Route path="/logout" element={<Logout/>} />  */}
-                <Route path="/" element={<h1>you are in the mainPage</h1>}/> 
+                <Route path="/" element={<MainPageComponent/>}/> 
                 <Route path="/restpassword" element={<ResetPassword/>}/> 
                 <Route path="/channel/*" element={<ChannelMainComponent/>}/>
                 <Route path="/register" element={<Register/>} />

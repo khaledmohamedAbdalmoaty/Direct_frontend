@@ -1,4 +1,9 @@
 import * as React from 'react';
+
+/* -------------------------------------------------------------------------- */
+/*                           import things from mui                           */
+/* -------------------------------------------------------------------------- */
+
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -34,9 +39,9 @@ export default function ShowListComponent({options}) {
   };
   const handleClose = (option) => {    
     if(option===actionTypes.CREATENEWCHANNEL){
-      console.log( `show list component => ${option}`)
       nav(`/channel/createChannel`)
     }
+   
 
     setAnchorEl(null); 
   };

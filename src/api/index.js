@@ -3,3 +3,4 @@
 
 export { useUploadPost} from './UploadPost.api'
 export {useGetPostComments,useAddCommentToPost,useGetPostById} from './SinglePost.api'
+export {useGetMainPagePosts} from './useGetMainPagePosts'

@@ -19,7 +19,8 @@ export const actionTypes = {
     UPLOADIMAGETOOLTIP: 'upload an image',
     CREATENEWCHANNEL:"create new channel "
 };
-  
+
+
 const reducer = (state, action) => {
     /* console.log(action); */
   

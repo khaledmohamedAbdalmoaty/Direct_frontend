@@ -31,6 +31,7 @@ import ChatBodyComponent from './ChatBodyComponent'
 /* -------------------------------------------------------------------------- */
 /*                     import form materila ui version 5                     */
 /* -------------------------------------------------------------------------- */
+import Box from '@mui/material/Box';
 
 /* -------------------------------------------------------------------------- */
 /*                  import things related to global variable                  */
@@ -75,6 +76,7 @@ function Chat() {
 
   
   return (
+     
     <div className="chat">
         <ChatHeaderComponent channelName={channelName} ChannelImageLocation={channelImageLocation}/>
         <ChatBodyComponent  conversation={conversation}/>
@@ -90,6 +92,7 @@ function Chat() {
         </div>
 
     </div>
+  
   )
 }
 
