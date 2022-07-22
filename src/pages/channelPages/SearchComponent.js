@@ -53,7 +53,7 @@ export default function SearchComponent() {
     <IconButton>
     <Box>
     
-       <AppBar position="static"   sx={{backgroundColor:'#f7f0f0'}}> 
+        <AppBar position="static"   sx={{backgroundColor:'#f7f0f0'}}> 
             <Search sx={{backgroundColor:'#f7f0f0'}} >
                 <SearchIconWrapper>
                 <SearchIcon />

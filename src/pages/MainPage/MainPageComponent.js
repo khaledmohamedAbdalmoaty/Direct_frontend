@@ -8,13 +8,13 @@ import Sidebar from '../channelPages/sidebarPage/Sidebar'
 import Feed from './Feed'
 import {Box,Stack} from "@mui/material"
 import { Navbar } from './Navbar';
-import  ResponsiveAppBar from './Navbar_2'
+import Navbar2 from './Navbar_2'
 const MainPageComponent = () => {
   return (
     <ThemeProvider theme={theme}>
-     <Box>
+     <Box sx={{backgroundColor:'#ced4da'}}>
      {/*  <Navbar/> */}
-      <ResponsiveAppBar/>
+      <Navbar2/>
       <Stack 
       direction="row"
       spacing={2}

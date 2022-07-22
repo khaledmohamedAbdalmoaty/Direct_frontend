@@ -4,18 +4,24 @@ const API_URL=process.env.REACT_APP_API_URL
 
 
 async function axiosRequestGetConversation(ChannelId){
-      const {data}=await axios.get(`${API_URL}/chat/get/conversationMsg?id=${ChannelId}`)
-      return data
+        try{
+                const {data}=await axios.get(`${API_URL}/chat/get/conversationMsg?id=${ChannelId}`)
+                return data
+        }
+        catch(err){
+                return err.message
+        }
+  
       
 }
 
-const useGetChannelConversationl=(ChannelId)=>{
+const useGetChannelData=(ChannelId)=>{
         return useQuery(['getChannelConversation',ChannelId],()=>axiosRequestGetConversation(ChannelId),{
                 enabled:!!ChannelId
         })
 }
 
-export default  useGetChannelConversationl
+export default  useGetChannelData
 
 
 

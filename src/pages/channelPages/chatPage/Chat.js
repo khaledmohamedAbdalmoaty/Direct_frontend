@@ -1,8 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                  import things related to react technology                 */
 /* -------------------------------------------------------------------------- */
-import React,{useRef,useState} from 'react'
-
+import React,{useRef,useState,useEffect} from 'react'
 /* -------------------------------------------------------------------------- */
 /*                     import things related to css files                     */
 /* -------------------------------------------------------------------------- */
@@ -19,14 +18,14 @@ import {useParams} from 'react-router-dom'
 /* -------------------------------------------------------------------------- */
 /*                     import things related to api folder                    */
 /* -------------------------------------------------------------------------- */
-import  useGetChannelConversationl from '../../../api/getConversation.api'
-import useAddNewConversationMsg from '../../../api/SendConversatonMsg.api'
+import  {useGetChannelData,useAddNewConversationMsg} from '../../../api'
 
 /* -------------------------------------------------------------------------- */
 /*                      import different custom component                     */
 /* -------------------------------------------------------------------------- */
-import ChatHeaderComponent from './ChatHeaderComponent'
 import ChatBodyComponent from './ChatBodyComponent'
+import ChatHeaderComponent2 from './ChatHeaderComponent2'
+import SubscribeButton from './SubscribeButton'
 
 /* -------------------------------------------------------------------------- */
 /*                     import form materila ui version 5                     */
@@ -36,7 +35,8 @@ import Box from '@mui/material/Box';
 /* -------------------------------------------------------------------------- */
 /*                  import things related to global variable                  */
 /* -------------------------------------------------------------------------- */
-import {useStateValue} from '../../../contexts/StateProvider'
+import {useStateValue,actionTypes} from '../../../contexts'
+import {Alert,GoBackComponent} from '../../../common'
 
 
 
@@ -44,11 +44,24 @@ function Chat() {
   //addNewMsg(channelId,inputRef.current.value,userId)
   const inputRef=useRef()
   const[state,setState]=useState(false)
-  const {channelId,channelName,channelImageLocation}=useParams()
-  const [{ user }, dispatch] = useStateValue();
-  const userId=user.uid
-  const {data:conversation,isLoading,isFetching,error,isError,refetch}=useGetChannelConversationl(channelId)
+  const {channelOwner,channelName,channelId}=useParams() 
+  const [{user,GlobalAlert},dispatch]=useStateValue()
+  const [showAlert,setShowAlert]=useState(false)
+
+  const userId=user.user_id
+  const currentUser=JSON.parse(localStorage.getItem('currentUserInfo')).user_id
+  /* const currentUser=user.user_id */
+  const {data:channelData,isLoading,isFetching,error,isError,refetch}=useGetChannelData(channelId)//it call get conversation message from api end Point
   const {mutate,isLoading:addMsgLoading,isError:addMsgisError,error:addMsgError}= useAddNewConversationMsg(channelId)
+  useEffect(()=>{
+    setShowAlert(true)
+    setTimeout(()=>{
+      setShowAlert(false)
+      dispatch({
+        type:actionTypes.RESETALERT
+      })
+    },1500)
+  },[GlobalAlert.chatState])
   
   if(isLoading){
     return <h2>Loading ....</h2>
@@ -56,42 +69,61 @@ function Chat() {
   if(isError){
     return (
     <>
-    <ChatHeaderComponent  channelName={channelName} channelImageLocation={channelImageLocation}/>
+    <ChatHeaderComponent2   channelName={channelName} channelId={channelId}  channelOwner={channelOwner} />
     <h1>{error.message}</h1>
     </>
     )
   }
 
-  const handleUploadFile=()=>{
-    setState(true)
-  }
-  const handleAddMsg =async (e)=>{
+const handleAddMsg =async (e)=>{
     e.preventDefault()
     const message=inputRef.current.value
     mutate({channelId,message,userId})
     inputRef.current.value=""
   } 
 
+  const handleSubscribe=()=>{
+    console.log("subscribe")
+  }
 
+ 
 
+    {/* check if user is block  */}
+    if(channelData.channel.BlockedUser.includes(userId)){
+     return (
+       <>
+       <GoBackComponent />
+       <h1 style={{margin:'auto'}}>{`channel Owner Blocked You`}</h1>
+       </>
+      )
+    }
+    
+   
+    const isSubScribe=channelData.channel.subScribers.includes(userId)
   
-  return (
+return (
      
-    <div className="chat">
-        <ChatHeaderComponent channelName={channelName} ChannelImageLocation={channelImageLocation}/>
-        <ChatBodyComponent  conversation={conversation}/>
+<div className="chat">  
+  <ChatHeaderComponent2 isSubScribe={isSubScribe} postOnly={channelData.channel.postOnly} channelId={channelId} canMakePost={channelData.channel.subScribersCanMakePost} channelOwner={channelOwner} channelName={channelName}/> 
+  {showAlert&&GlobalAlert.msg&&<Alert message={GlobalAlert}/>}
 
-      
+  <ChatBodyComponent isSubScribe={isSubScribe} channelOwner={channelOwner} conversation={channelData.conversation} channelId={channelId}/>
 
         {/*  chat footer */}
-        <div className="chat__footer">
-            <form >
-              <input  ref={inputRef} placeholder='Type a message' type="text"/>
-              <button  onClick={handleAddMsg} type="submit" >send Message</button>
-            </form>
-        </div>
-
-    </div>
+        {
+          (isSubScribe||(channelOwner===currentUser))? (!channelData.channel.postOnly)&&(
+            <div className="chat__footer">
+                <form >
+                  <input  ref={inputRef} placeholder='Type a message' type="text"/>
+                  <button  onClick={handleAddMsg} type="submit" >send Message</button>
+                </form>
+            </div>
+          ):(       
+               <SubscribeButton  channelId={channelId}/>
+          )
+        }
+        
+</div>
   
   )
 }

@@ -6,8 +6,7 @@ import React,{useEffect,useState} from 'react'
 /* -------------------------------------------------------------------------- */
 /*            import things related to global variable and context            */
 /* -------------------------------------------------------------------------- */
-import {AuthProvider} from './contexts/StateProvider'
-import {useStateValue} from './contexts/StateProvider'
+import {useStateValue,actionTypes,initialState} from './contexts'
 
 
 /* -------------------------------------------------------------------------- */
@@ -23,8 +22,7 @@ import './common/login.css'
 import Login from "./pages/login/Login" ;
 import Register from "./pages/register/Register";
 import ResetPassword from "./pages/resetPassword/ResetPassword"; 
-import Try from './Try'
-
+import UserProfile from './pages/profilePages/UserProfile'
 /* -------------------------------------------------------------------------- */
 /*                            import from MainPage                            */
 /* -------------------------------------------------------------------------- */
@@ -46,6 +44,7 @@ import {
 import {
   QueryClient,
   QueryClientProvider,
+ 
 } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 const queryClient = new QueryClient();
@@ -54,15 +53,31 @@ const queryClient = new QueryClient();
 
 
 function App() {
-  const [{ user }, dispatch] = useStateValue();
+  
+  const [{user},dispatch] = useStateValue();
+  let currentUser=JSON.parse(localStorage.getItem('currentUserInfo'))
+  currentUser= currentUser!==null ? currentUser:initialState.user
+  
+  useEffect(()=>{
+   /*  dispatch function */
+    dispatch({
+      type:actionTypes.SET_USER,
+      user:currentUser
+    })
+
+   
+},[])
+ 
 
   return (
       <Router>
-          {!user ? (
+          {!currentUser.user_id ? (
           <Routes>         
               <Route path="/register" element={<Register/>} />
               <Route path="/login" element={<Login/>} />
-              <Route path="/" element={<Login/>} />  
+              <Route path="/" element={<Login/>} />    
+              <Route path="/restpassword" element={<ResetPassword/>}/> 
+        
           </Routes>
 
         ) : (
@@ -70,20 +85,16 @@ function App() {
           <>
           <QueryClientProvider client={queryClient}>
             <Routes>
-                    {/*    <PrivateRoute exact path="/profile" element={<Profile2/>} />
-                  <PrivateRoute exact path="/" element={<Login/>} /> 
-                <PrivateRoute path="/update-profile" element={UpdateProfile} /> 
-              <Route path="/logout" element={<Logout/>} />  */}
+              <Route path="/profile/:userId" element={<UserProfile/>}/> 
                 <Route path="/" element={<MainPageComponent/>}/> 
+                <Route path="/MainPage" element={<MainPageComponent/>}/> 
                 <Route path="/restpassword" element={<ResetPassword/>}/> 
                 <Route path="/channel/*" element={<ChannelMainComponent/>}/>
                 <Route path="/register" element={<Register/>} />
                 <Route path="/login" element={<Login/>} />
-                <Route path="/try" element={<Try/>} />  
-                {/*  <Route path="/login" element={Login} />
-                  <Route path="/forgot-password" element={ForgotPassword} /> */}
-            </Routes>
-            <ReactQueryDevtools initialIsOpen />
+                <Route path="/logout" element={<Login/>} />
+              </Routes>
+           {/*  <ReactQueryDevtools initialIsOpen /> */}
           </QueryClientProvider> 
 
            </>

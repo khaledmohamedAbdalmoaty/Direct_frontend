@@ -19,7 +19,6 @@ export default function ResetPassword() {
   })
   .catch((error) => {
     setMessage({msg:"Your email is not exist ",state:false})
-   /*  console.log(Error) */
   });
 
 }
@@ -60,10 +59,9 @@ export default function ResetPassword() {
   Need an account? <Link to="/register">Sign Up</Link>
 </div>
 </div>
-</Container> *
+</Container> 
   
   </>
    
    
 )}
-

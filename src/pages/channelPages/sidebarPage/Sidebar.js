@@ -9,59 +9,58 @@ import './Sidebar.css'
 /* -------------------------------------------------------------------------- */
 /*                  import things related to global variable                  */
 /* -------------------------------------------------------------------------- */
-import {useStateValue} from '../../../contexts/StateProvider'
+import {useStateValue} from '../../../contexts'
 
-/* ----------------------- materialui imported things ----------------------- */
-import DonutLargeIcon from '@material-ui/icons/DonutLarge'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import ChatIcon from '@material-ui/icons/Chat'
-import {Avatar,IconButton} from '@material-ui/core'
-import { SearchOutlined } from '@material-ui/icons'
+
 
 /* ----------------------------- new add things ----------------------------- */
-import axios from '../axios'
-import Pusher from 'pusher-js'
 import ShowSidebarChannelComponent from './ShowSidebarChannelComponent'
 import SidebarHeaderComponent from './SidebarHeaderComponent'
-import SearchComponent from '../SearchComponent'
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-import Box from '@mui/material/Box';
+import {SearchComponent} from '../SearchPage'
 
 /* --------------------- import get user channel request -------------------- */
-import useGetUserChannel from '../../../api/getUserChannel.api'
+import {useGetUserChannel} from '../../../api'
 
-
-
+/* -------------------------------------------------------------------------- */
+/*                           import custom component                          */
+/* -------------------------------------------------------------------------- */
+import EmailSidebarLink from './EmailSidebarLink'
+import SendedEmailSidebarLink from './SendedEmailSidebarLink'
 /* -------------------------------------------------------------------------- */
 
 function Sidebar() {
-  const [{ user }, dispatch] = useStateValue();
-  const userId=user.uid
+  const userId=JSON.parse(localStorage.getItem('currentUserInfo')).user_id
   const {data:channels,isLoading,isFetching,error,isError,refetch}=useGetUserChannel(userId)
 
   if(isLoading){
     return <h2>Loading ...</h2> 
   }
 
-  if(isError){
+  if(error||!channels) {
     console.log(error)
     return (
-    <h2>{ error.message}</h2>)
+    <h2>sidebarError:No channels</h2>)
   }
 
   //const [{user}]=useStateValue()
   return (  
-    <div className="sidebar">
+    <div className="sidebar" style={{maxWidth:"300px"}}>
         <div className="sidebar__header">
-          <SidebarHeaderComponent/> 
+          <SidebarHeaderComponent  currentUserData={channels.currentUserData}/> 
         </div>
      {/* ----------------------------- search Icon  ---------------------------- */ }
         <SearchComponent/>
+
+     {/*  ---------------------------- E-mail component ----------------------------  */}
+     
       {/* ---------------------------- show all channel ---------------------------- */ }
       <div className="sidebar__chats">
+        <EmailSidebarLink/>
+        <SendedEmailSidebarLink/>
+    
         {
-         channels.map((channel)=>(<ShowSidebarChannelComponent key={channel.id} channel={channel} />))
-         }       
+         channels.allChannel.map((channel)=>(<ShowSidebarChannelComponent key={channel._id} channel={channel.channelIdModel} />))
+        }       
       </div>
 
     </div>

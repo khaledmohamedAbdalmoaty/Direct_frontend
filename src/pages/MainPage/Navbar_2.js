@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React,{useState,useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,21 +16,43 @@ import AdbIcon from '@mui/icons-material/Adb';
 /* -------------------------------------------------------------------------- */
 /*                           import custom component                          */
 /* -------------------------------------------------------------------------- */
-import ShowSidebarInSmallScreen from '../channelPages/sidebarPage/ShowSidebarInSmallScreen'
 
 /* -------------------------------------------------------------------------- */
 /*                        import form react router dom                        */
 /* -------------------------------------------------------------------------- */
 import { useNavigate} from 'react-router-dom';
 
+/* -------------------------------------------------------------------------- */
+/*                        import action types from api                        */
+/* -------------------------------------------------------------------------- */
+import {actionTypes,useStateValue} from '../../contexts'
+import {Alert} from '../../common'
+import {useGetUserData} from '../../api'
 
 
-const pages = ["Channels"];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const ResponsiveAppBar = () => {
-  const imageSrc="https://thumbs.dreamstime.com/b/html-internet-code-9648924.jpg"
+
+const pages = [actionTypes.GetSideBarChannel];
+const settings = [actionTypes.CURRENTUSERPROFILE,actionTypes.USERLOGOUT,actionTypes.GetSideBarChannel];
+
+
+const Navbar2 = () => {
   const nav=useNavigate()
+  const [{user,GlobalAlert},dispatch]=useStateValue()
+  const currentUserId=JSON.parse(localStorage.getItem('currentUserInfo')).user_id
+  const {data:userData,isLoading}=useGetUserData(currentUserId)
+  /* show alert in mainPage */
+  const [showAlert,setShowAlert]=useState(false)
+  useEffect(()=>{
+    setShowAlert(true)
+    setTimeout(()=>{
+      setShowAlert(false)
+      dispatch({
+        type:actionTypes.RESETALERT
+      })
+    },1500)
+  },[GlobalAlert.chatState])
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -42,23 +64,34 @@ const ResponsiveAppBar = () => {
   };
 
   const handleCloseNavMenu = () => {
+    //here we add the action of profile and other things 
     nav(`/channel/showChannelInSmallScreen`)
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (setting) => {
+    if(setting===actionTypes.CURRENTUSERPROFILE){
+      nav(`/profile/${userData&&userData._id}`)
+    }
+    else if (setting===actionTypes.USERLOGOUT){
+      localStorage.clear()
+      nav(`/login`)
+    }
+    else if (setting===actionTypes.GetSideBarChannel){
+      nav(`/channel/allEmails`)
+    }
     setAnchorElUser(null);
   };
 
+
   return (
+    <>
     <AppBar/*  position="static" */ position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-        {/*   <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
-            component="a"
             href="/"
             sx={{
               mr: 2,
@@ -66,56 +99,15 @@ const ResponsiveAppBar = () => {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
               textDecoration: 'none',
             }}
           >
             Direct
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu} 
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-
-                {pages.map((page)=>(
-                <MenuItem key={page} onClick={handleCloseNavMenu}  >
-                  <Typography textAlign="center"> {page}</Typography>
-                </MenuItem>  
-
-                ))}
-            </Menu>
-          </Box>
-         {/*  <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
-            component="a"
             href=""
             sx={{
               mr: 2,
@@ -129,26 +121,14 @@ const ResponsiveAppBar = () => {
             }}
           >
             Direct
-          </Typography>
+          </Typography> 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <ShowSidebarInSmallScreen/>
           </Box>
-           {/*  {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-           */}
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Typography varient="span" sx={{ m: 2 }} >khaled abdalmoaty </Typography>
-                <Avatar alt="Remy Sharp" src={imageSrc}  />
+              <Typography varient="span" sx={{ m:1,color:'White'}}> {userData&&userData.username} </Typography>
+                <Avatar alt="image?!" src={userData&&userData.profilePicture} imgProps={{crossOrigin:"anonymous" }} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -168,15 +148,18 @@ const ResponsiveAppBar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={()=>handleCloseUserMenu(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
         </Toolbar>
+        {showAlert&&GlobalAlert.msg&&<Alert message={GlobalAlert}/>}
+
       </Container>
     </AppBar>
+    </>
   );
 };
-export default ResponsiveAppBar;
+export default Navbar2;

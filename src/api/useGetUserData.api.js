@@ -5,7 +5,7 @@ const url=process.env.REACT_APP_API_URL
 
 
 const axiosRequestGetUserData=async (userId)=>{
-    const {data}=await axios.get(`${url}/users/${userId}`)
+    const {data}=await axios.get(`${url}/users/id/${userId}`)
     return  data
 }
 
@@ -17,3 +17,4 @@ const useGetUserData=(userId)=>{
 }
 
 export default useGetUserData
+

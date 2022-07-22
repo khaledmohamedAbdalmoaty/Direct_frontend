@@ -4,6 +4,13 @@ import {useMutation,useQueryClient} from 'react-query'
 const API_URL=process.env.REACT_APP_API_URL
 const IMG_URL=process.env.REACT_APP_IMG_URL
 
+/* -------------------------------------------------------------------------- */
+/*                     import things related to socket.io                     */
+/* -------------------------------------------------------------------------- */
+import io from 'socket.io-client'
+const sockit_io_URL=process.env.REACT_APP_SOCKIT_IO_URL
+const socket=io.connect(sockit_io_URL)
+import {actionTypes} from '../contexts'
 
 
 /* -------------------------------------------------------------------------- */
@@ -43,13 +50,8 @@ export function useUploadPost(){
 
   return useMutation(axiosAddPost,{
       onSuccess:(newMessage)=>{
-           queryClient.invalidateQueries('getChannelConversation') 
-      /*  queryClient.setQueryData(['getChannelConversation',channelId],(oldQueryData)=>{
-              return {
-                  ...oldQueryData,
-                  data:[...oldQueryData,newMessage.data],
-              }
-          } ) */
+           socket.emit('change',{actionTypes:actionTypes.getChannelConversation})
+    
       } 
   })
       

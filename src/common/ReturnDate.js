@@ -4,6 +4,10 @@ const ddd= date.toLocaleString('en-GB', { hour12: true, day:'numeric', month: 'l
 return ddd
 }
 
-
+export const ReturnTodayDate= (timestamp) => {
+    const date=new Date(timestamp)
+    const ddd= date.toLocaleString('en-GB', { hour12: true, day:'numeric', month: 'long', year:'numeric'}) 
+    return ddd
+    }
 
 

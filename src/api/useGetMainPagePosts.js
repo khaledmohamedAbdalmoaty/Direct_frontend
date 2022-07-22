@@ -1,5 +1,5 @@
 import axios from 'axios' 
-import {useMutation,useQueryClient, useQuery} from 'react-query'
+import {useQuery} from 'react-query'
 const API_URL=process.env.REACT_APP_API_URL
 
 

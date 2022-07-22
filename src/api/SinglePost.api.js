@@ -1,6 +1,14 @@
 import axios from 'axios' 
 import {useMutation,useQueryClient, useQuery} from 'react-query'
 const API_URL=process.env.REACT_APP_API_URL
+import {actionTypes} from '../contexts'
+
+/* -------------------------------------------------------------------------- */
+/*                     import things related to socket.io                     */
+/* -------------------------------------------------------------------------- */
+import io from 'socket.io-client'
+const sockit_io_URL=process.env.REACT_APP_SOCKIT_IO_URL
+const socket=io.connect(sockit_io_URL)
 
 
 /* -------------------------------------------------------------------------- */
@@ -58,7 +66,8 @@ export const useAddCommentToPost=(channelId)=>{
     const queryClient = useQueryClient()
     return useMutation(axiosAddComment,{
         onSuccess:(newMessage)=>{
-           queryClient.invalidateQueries('getPostComments') 
+           socket.emit('change',{actionTypes:actionTypes.getPostComments})
+
         /*  queryClient.setQueryData(['getChannelConversation',channelId],(oldQueryData)=>{
                 return {
                     ...oldQueryData,

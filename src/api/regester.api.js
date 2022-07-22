@@ -16,8 +16,9 @@ export function registerRequest(setMessage,setLoading,username, email, password,
        if(res.data.status!==200){
           return setMessage({msg:`Failed to create an account`,state:false})
         }
-        setMessage({msg:`Successful create an ccount`,state:true})
         setTimeout(()=>nav('/login'),1000)
+        setMessage({msg:`success to create account`,state:true})
+
         
      })
      .catch(()=>setMessage({msg:`Failed to create an account`,state:false}))

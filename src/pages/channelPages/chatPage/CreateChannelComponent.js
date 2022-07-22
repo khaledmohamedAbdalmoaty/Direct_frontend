@@ -1,52 +1,92 @@
-import React,{ useState } from 'react'
+import React,{ useState,useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-import Alert from '../../../common/Alert'
-import {RegistervalidationSchema,errorStyle} from '../../../common'
-import {registerRequest} from '../../../api/regester.api'
+import {RegistervalidationSchema,errorStyle,CreateChannelSchema} from '../../../common'
 import { useFormik } from 'formik';
 import {TextField} from '@mui/material'
 
 
-function LoginRight() {
-    const [message, setMessage] = useState({msg:"",state:false})
-    const [loading, setLoading] = useState(false)
-    const nav = useNavigate();    
-    let gotToLoginPage=()=>{
-      nav('/login')
+/* -------------------------------------------------------------------------- */
+/*                               import from api                              */
+/* -------------------------------------------------------------------------- */
+import {useCreateChannel} from '../../../api'
+import {GoBackComponent,Alert} from '../../../common'
+import {useStateValue,actionTypes} from '../../../contexts'
+import "./Chat.css"
+/* -------------------------------------------------------------------------- */
+/*                               import from mui                              */
+/* -------------------------------------------------------------------------- */
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+function CreateChannelFields() {
+  const [showAlert,setShowAlert]=useState(false)
+ 
+    /* ---------------------- select type of channel things --------------------- */
+    const [PostOnlyChannel, setPostOnlyChannel] = React.useState();
+    const [canMakePost,setCanMakePost]=React.useState()
+    const [{user,GlobalAlert},dispatch]=useStateValue()
+    const channelOwner=user.user_id
+    const {mutate}=useCreateChannel()
+
+    const handleChange = (event) => {
+      setPostOnlyChannel(event.target.value);
+    };
+
+    const handleCanMakePost=(event)=>{
+      setCanMakePost(event.target.value)
     }
 
-    let handleSubmit=()=>{
-      const userName=formik.values.userName
-      const email=formik.values.email
-      const password=formik.values.password
-      const confirmPassword=formik.values.confirmPassword
-
-        if (password!== confirmPassword) {
-          return setMessage({msg:"Passwords do not match",state:false})
-        }
-        setLoading(true)
-       registerRequest(setMessage,setLoading,
-        userName,
-       email,
-        password,nav)
+    const [message, setMessage] = useState({msg:"",state:false})
+    const [loading, setLoading] = useState(false)
+    const nav = useNavigate(); 
+    
+    useEffect(()=>{
+      setShowAlert(true)
+      setTimeout(()=>{
+        setShowAlert(false)
+        dispatch({
+          type:actionTypes.RESETALERT
+        })
+      },1500)
+    },[GlobalAlert.createChannelComponent])
+ 
+    const handleSubmit=()=>{
+    const channelName=formik.values.channelName
+    const priority=formik.values.priority
+    const postOnly=PostOnlyChannel
+    const subScribersCanMakePost=canMakePost 
+          
+      setLoading(true)
+      mutate({channelOwner,
+        channelName,
+        priority,
+        postOnly,
+        nav,
+        subScribersCanMakePost,dispatch,setLoading})
         setTimeout(()=>setLoading(false),1000)
     }
       
     const formik = useFormik({
       initialValues: {
-        userName:'',
-        email: '',
-        password: '',
-        confirmPassword:""
+        channelName:'',
+        priority: 1000,
+        postOnly:false
       },
-      validationSchema:RegistervalidationSchema,
+      validationSchema:CreateChannelSchema,
       onSubmit:handleSubmit
     });
 
 
   return (
+ /*  <div className="chat">  
+     <div className="chat__body" > */
     <div className="loginRight">
+      <GoBackComponent /* bgColor2={'blue'} *//>
             <form onSubmit={formik.handleSubmit}>
+            {showAlert&&GlobalAlert.msg&&<Alert message={GlobalAlert}/>}
             <h1>Create channel </h1>
               <div className= "loginBox" style={errorStyle(message.msg)}>
               {message.msg&&<Alert message={message}/>}
@@ -54,72 +94,91 @@ function LoginRight() {
               fullWidth
               variant="standard"
               onBlur={formik.handleBlur}
-              id="userName"
-              name="userName"
-              label="userName"
-              value={formik.values.userName}
+              id="channelName"
+              name="channelName"
+              label="channelName"
+              value={formik.values.channelName}
               onChange={formik.handleChange}
-              error={formik.touched.userName && Boolean(formik.errors.userName)}
-              helperText={formik.touched.userName && formik.errors.userName} 
+              error={formik.touched.channelName && Boolean(formik.errors.channelName)}
+              helperText={formik.touched.channelName && formik.errors.channelName} 
               />
 
-            <TextField
-            variant="standard"
-            fullWidth
-            onBlur={formik.handleBlur}
-            id="email"
-            name="email"
-            label="Email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-          />
-           <TextField
-           variant="standard"
-          fullWidth
-          onBlur={formik.handleBlur}
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-         <TextField
-          fullWidth
-          variant="standard"
-          onBlur={formik.handleBlur}
-          id="password"
-          name="confirmPassword"
-          label="password again"
-          type="password"
-          value={formik.values.confirmPassword}
-          onChange={formik.handleChange}
-          error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-          helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-        />
+              <TextField
+              fullWidth
+              variant="standard"
+              onBlur={formik.handleBlur}
+              id="priority"
+              name="priority"
+              label="priority"
+              type="number"
+              value={formik.values.priority}
+              onChange={formik.handleChange}
+              error={formik.touched.priority && Boolean(formik.errors.priority)}
+              helperText={formik.touched.priority && formik.errors.priority} 
+              />
+            
 
-      <button   disabled={loading} style={ loading?{opacity:0.5}:{opacity:1,margin:"4px"}}type="submit"  className="loginButton">Sign Up</button>
-      <button onClick={gotToLoginPage}  className="loginRegisterButton">
-        Log into Account
-      </button>
+             {/*  select type of channel ui */}
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Type</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={PostOnlyChannel}
+                label="Type"
+                onChange={handleChange}
+              >
+                <MenuItem value={true}>post only</MenuItem>
+                <MenuItem value={false}>post And chat</MenuItem>
+        
+              </Select>
+            </FormControl>
+          </Box>
+
+             
+             {/*  select user can make posts*/}
+
+             {
+              (!PostOnlyChannel)&&(
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={canMakePost}
+                    label="Type"
+                    onChange={handleCanMakePost}
+                  >
+                    <MenuItem value={true}>user can make posts</MenuItem>
+                    <MenuItem value={false}>user can't make post on your channel </MenuItem>
+            
+                  </Select>
+                </FormControl>
+              </Box>
+              )
+             }
+          
+
+
+      <button   disabled={ loading} style={ loading?{opacity:0.5}:{opacity:1,margin:"4px"}}type="submit"  className="loginButton">Submit</button>
     </div> 
-  </form>        
+      </form>        
     </div>
+ /*  </div>
+  </div> */
   )
 }
 
 
 
-export default function Register() {
-  return (
-     <div className="login">
-        <div className="loginWrapper">
-          <LoginRight/>
-        </div>
-      </div>
-  );
+export default function CreateChannelComponent() {
+  return (   
+        <div className="chat">
+          <div className="chat__body" >
+                <CreateChannelFields/>
+          </div>
+        </div>  
+);
 }

@@ -49,12 +49,7 @@ import Sidebar from './Sidebar'
 
  
 
-
-
-
-
-
-export default function TemporaryDrawer() {
+export default function ShowSidebarInSmallScreen() {
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -86,7 +81,7 @@ export default function TemporaryDrawer() {
   return (
     <Box  >
     <div>
-     {['channels'].map((anchor) => ( 
+     {['left'].map((anchor) => ( 
    
         <React.Fragment key={anchor}>
           <Button sx={{ my: 2, color: 'black', display: 'block' }} onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
@@ -95,7 +90,7 @@ export default function TemporaryDrawer() {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
-             {list('left')} 
+             {list(anchor)} 
           </Drawer>
         </React.Fragment>
       ))}

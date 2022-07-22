@@ -1,4 +1,5 @@
-import axios from 'axios' 
+import axios from 'axios'
+ 
 import {useMutation,useQueryClient} from 'react-query'
 
 const API_URL=process.env.REACT_APP_API_URL
@@ -13,6 +14,17 @@ const UploadImageToMulter=async (file)=>{
  */        return result.data
     }    
 }
+
+/* -------------------------------------------------------------------------- */
+/*                     import things related to socket.io                     */
+/* -------------------------------------------------------------------------- */
+import io from 'socket.io-client'
+const sockit_io_URL=process.env.REACT_APP_SOCKIT_IO_URL
+const socket=io.connect(sockit_io_URL)
+import {actionTypes} from '../contexts'
+
+
+
 
 
 /* -------------------------------------------------------------------------- */
@@ -38,7 +50,8 @@ export function  useUpLoadConversationImage(){
 
   return useMutation(axiosAddUploadImageMsg,{
       onSuccess:(newMessage)=>{
-           queryClient.invalidateQueries('getChannelConversation') 
+           socket.emit('change',{actionTypes:actionTypes.getChannelConversation})
+
       /*  queryClient.setQueryData(['getChannelConversation',channelId],(oldQueryData)=>{
               return {
                   ...oldQueryData,
@@ -53,6 +66,3 @@ export function  useUpLoadConversationImage(){
 /* ----------------------------- use upload post ---------------------------- */
 
 export default UploadImageToMulter
-
-
-

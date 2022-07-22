@@ -1,8 +1,7 @@
 .chat {
     display: flex;
     flex-direction: column;
-    flex: 1;
-   
+    flex: 1;   
 }
 
 
@@ -79,6 +78,15 @@
 }
 
 .chat__footer>form>input {
+    flex: 1;
+    outline-width: 0;
+    border-radius: 30px;
+    padding: 10px ;
+    border: none;
+    margin:0px 100px;
+}
+
+.chat__footer>form>div{
     flex: 1;
     outline-width: 0;
     border-radius: 30px;

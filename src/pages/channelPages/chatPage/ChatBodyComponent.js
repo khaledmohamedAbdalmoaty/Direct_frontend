@@ -18,30 +18,31 @@ import ChatHeaderComponent from './ChatHeaderComponent'
 import PostComponent from './PostComponent'
 import ChatShowUploadedImageComponent from './ChatShowUploadedImageComponent'
 import CreatePostComponent from './CreatePostComponent'
+import {useStateValue} from '../../../contexts'
+import {Alert} from '../../../common'
+
 
 /* -------------------------------------------------------------------------- */
 /*                  import things related to global variable                  */
 /* -------------------------------------------------------------------------- */
-import {useStateValue} from '../../../contexts/StateProvider'
 
 
-const ChatBodyComponent = ({conversation}) => {
 
-  
 
+const ChatBodyComponent = ({conversation,channelOwner,channelId,isSubScribe}) => {
+  const [{user,GlobalAlert},dispatch]=useStateValue()
 
   return (
     <>
     <div className="chat__body" >
     {
-     
      conversation.map((msg,index)=>(
-      msg.postEnable && msg.post ? 
-      (<PostComponent key={Date.now()+index} post={msg.post} userInfo={msg.whoSendMsg}/>)  : 
+      (msg.postEnable && msg.post) ? 
+      (<PostComponent msg={msg} isSubScribe={isSubScribe} key={'jaa8fhavadfei8892823'+index} post={msg.post} userInfo={msg.whoSendMsg}/>)  : 
       msg.uploadedImageEnable ?  
       (
-      <ChatShowUploadedImageComponent key={index+Date.now()} msg={msg}/>)
-       :(<ChatMessageComponent key={index+Date.now()+Date.now()} msg={msg} index={index} />)
+      <ChatShowUploadedImageComponent key={index+'aklsjdiqvnq87v'} msg={msg}/>)
+       :(<ChatMessageComponent key={index+'qinvq828vap[}'} msg={msg} index={index}  channelOwner={channelOwner} />)
     ))
     
     }

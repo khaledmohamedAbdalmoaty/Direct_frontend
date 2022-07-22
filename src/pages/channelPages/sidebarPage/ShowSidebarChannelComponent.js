@@ -6,17 +6,20 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate} from 'react-router-dom';
-import ShowListComponent from '../ShowListComponent';
+import ShowListComponent from '../../../common/ShowListComponent';
+import CssBaseline from '@mui/material/CssBaseline';
 
 export default function ShowSidebarChannelComponent({channel}) {
     let nav=useNavigate()
-  const {name:channelName,channelImageLocation,id,postOnly}=channel
+ 
+  const {channelName,_id:id}=channel
+  const channelOwner=channel.channelOwner&&channel.channelOwner._id
+
   const selectChannel = () => {
-    if(postOnly){
-      nav(`/channel/postOnly/${channelName}/${id}`)
-    }
-    else if (id) {
-        nav(`/channel/${channelName}/${id}`)
+
+    if (id) {
+      nav(`/channel/${channelOwner}/${channelName}/${id}`) 
+       
     } else {
         nav('/login');
     }
@@ -24,20 +27,15 @@ export default function ShowSidebarChannelComponent({channel}) {
 
   return (
     <Box sx={{ 
-        backgroundColor:'rgba(0, 0, 0, 0.04)',
+        backgroundColor:"#ededed"/* 'rgba(0, 0, 0, 0.04)' */,
         m:"0px",
         p:'0px',
         }} onClick={selectChannel}>
-      {/* <CssBaseline /> */}
+      <CssBaseline/> 
        <List> 
-          <ListItem button>
-              <Avatar  alt="channel Picture" src={channelImageLocation} />
-            <ListItemAvatar >
-            </ListItemAvatar>
-            <ListItemText primary={channelName} /* secondary={secondary} */ />
-            <ShowListComponent options={['setPriority of channel ']}/>
-          </ListItem>
-         
+          <ListItem button>              
+            <ListItemText primary={`# ${channelName}`}  /* secondary={'khaled'} */  />
+          </ListItem>         
        </List>  
 
     </Box>

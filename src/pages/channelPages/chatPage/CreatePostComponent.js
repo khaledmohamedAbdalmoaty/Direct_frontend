@@ -1,25 +1,13 @@
 import * as React from 'react';
-/* -------------------------------------------------------------------------- */
-/*                      import from materila ui versin 5                      */
-/* -------------------------------------------------------------------------- */
+
+
 /* -------------------------------------------------------------------------- */
 /*                      import from materila ui versin 5                      */
 /* -------------------------------------------------------------------------- */
 import {Box,Modal,Typography,IconButton,styled,Avatar,TextField,Stack,Fab,ButtonGroup,Button,Input,Tooltip} from '@mui/material' 
-import {AttachFile,Image,Add as AddIcon,DateRange,PhotoCamera} from '@mui/icons-material'
-
 import PostAddTwoToneIcon from '@mui/icons-material/PostAddTwoTone';
  
-/* -------------------------------------------------------------------------- */
-/*                           new things that we try                           */
-/* -------------------------------------------------------------------------- */
-import { useNavigate } from "react-router-dom";
-import Alert from '../../../common/Alert'
-import { errorStyle } from '../../../common/errorStyle'
-import {registerRequest} from '../../../api/regester.api'
-import {RegistervalidationSchema} from '../../../common/validationSchema'
-import { useFormik } from 'formik';
-import axios from 'axios'
+
 /* -------------------------------------------------------------------------- */
 /*                 import differetn things from context folder                */
 /* -------------------------------------------------------------------------- */
@@ -29,7 +17,7 @@ import {useStateValue,actionTypes} from '../../../contexts'
 /*            import didfferent things from react router dom var.6            */
 /* -------------------------------------------------------------------------- */
 
-import {useParams} from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
 
 /* -------------------------------------------------------------------------- */
 /*                   import different things from api folder                  */
@@ -75,15 +63,17 @@ const UserBox=styled(Box)({
 
 
 const CreatePostComponent=()=> {
-  const [{ user }, dispatch] = useStateValue();
-  const {channelId}=useParams()
-  const userId=user.user_id
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
- const [file,setFile]=React.useState()
- const [imageCaption,setimageCaption]=React.useState()
- const {mutate}=useUploadPost()
+
+const [{ user }, dispatch] = useStateValue();
+const {channelId}=useParams()
+const userId=user.user_id
+const [open, setOpen] = React.useState(false);
+const handleOpen = () => setOpen(true);
+const handleClose = () => setOpen(false);
+const [file,setFile]=React.useState()
+const [imageCaption,setimageCaption]=React.useState()
+const {mutate}=useUploadPost()
+
  
   const takeFile=(e)=>{
     setFile(e.target.files[0])
@@ -133,18 +123,18 @@ const CreatePostComponent=()=> {
               type='file' 
               accept="image/*" 
               onChange={takeFile}
-               required
+              /*  required */
           /> 
 
-              <TextField
-              onChange={(e)=>setimageCaption(e.target.value)}
-              fullWidth
-              variant="standard"
-              name="photoCaption"
-              label="photo caption"
-              multiline
-              rows='3'          
-              />
+            <TextField
+            onChange={(e)=>setimageCaption(e.target.value)}
+            fullWidth
+            variant="standard"
+            name="photoCaption"
+            label="post Description"
+            multiline
+            rows='3'          
+            />
             <button   disabled={false} type="submit"  className="loginButton">upload</button>
           </div> 
         </form>        

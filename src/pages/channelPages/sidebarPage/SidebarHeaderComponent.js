@@ -4,25 +4,35 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
-import ShowListComponent from '../ShowListComponent'
+import ShowListComponent from '../../../common/ShowListComponent'
+import IconButton from '@mui/material/IconButton';
 
 /* -------------------------------------------------------------------------- */
 /*                         improt from context folder                         */
 /* -------------------------------------------------------------------------- */
 import {actionTypes} from '../../../contexts'
+import {useNavigate} from 'react-router-dom'
 
+export default function SidebarHeaderComponent({currentUserData}) {
+const nav=useNavigate()
+const profilePicture=currentUserData&& currentUserData.profilePicture
+const username=currentUserData&& currentUserData.username
+const handleShowProfile=()=>{
+  nav(`/profile/${currentUserData._id}`)
+}
 
-export default function SidebarHeaderComponent() {
   
   return (
 
 <List sx={{backgroundColor:'#f8f6f6'}} >
-  <ListItem button >
+  <ListItem>
     <ListItemAvatar>
-      <Avatar alt="Profile Picture" src={'/public/'} />
+    <IconButton aria-label="chatMessage" onClick={handleShowProfile}>
+      <Avatar alt="Profile Picture" imgProps={{crossOrigin:"anonymous" }} src={profilePicture} />
+    </IconButton>
     </ListItemAvatar>
-    <ListItemText primary={"room Name"} secondary={'last seen in '} />
-    <ShowListComponent options={[actionTypes.CREATENEWCHANNEL]}/>
+    <ListItemText primary={username} />
+    <ShowListComponent options={[actionTypes.CREATENEWCHANNEL,actionTypes.MAINPAGE,actionTypes.CURRENTUSERPROFILE]}/>
   </ListItem>
 </List>
     

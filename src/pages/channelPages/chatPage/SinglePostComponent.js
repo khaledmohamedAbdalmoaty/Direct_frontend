@@ -3,9 +3,9 @@ import React ,{useRef,useMemo,useEffect,useLayoutEffect} from 'react'
 /* -------------------------------------------------------------------------- */
 /*                          import custom components                          */
 /* -------------------------------------------------------------------------- */
-import PostComponent from './PostComponent';
-import  SinglePostHeaderComponent from './SinglePostHeaderComponent'
 import ChatMessageComponent  from './ChatMessageComponent'
+import {GoBackComponent} from '../../../common'
+import PostComponent from './PostComponent'
 /* -------------------------------------------------------------------------- */
 /*                             import from context                            */
 /* -------------------------------------------------------------------------- */
@@ -22,7 +22,7 @@ import  {useGetPostComments,useAddCommentToPost,useGetPostById} from '../../../a
 import { useParams } from 'react-router-dom';
 
 
-const SinglePostComponent = () => {
+const SingleShowSinglePost = () => {
  
     const {postId}=useParams()
     const inputRef=useRef()
@@ -37,79 +37,51 @@ const SinglePostComponent = () => {
     
    
 
-    const handleAddComment=(e)=>{
-      e.preventDefault()
+    const handleAddComment=()=>{
       const channelId=post.channelId._id 
       const postId=post._id 
       const message=inputRef.current.value
       const userId=MsgUserId
+      console.log(`from single post component:>userId who send message is :>${userId}`)
       mutate({channelId,postId,message,userId})  
       inputRef.current.value=""
     }
-
-
-    const showPostHeader=useMemo((p)=>{
-      /*   <SinglePostHeaderComponent userId={post.userId._id} channelId={post.channelId._id} channelName={post.channelId.channelName} channelImageLocation={post.channelId.channelImageLocation}/>*/  
-/*       <SinglePostHeaderComponent userId={p.userId._id} channelId={p.channelId._id} channelName={p.channelId.channelName} channelImageLocation={p.channelId.channelImageLocation}/>
- */      
-      }) 
-
-     /*  const showPostComponent=useMemo(()=>{
-        <PostComponent post={post} userInfo={post.userId}/> 
-     
-    }) */
-  
-      
    
-       
-    
     if(isLoading){
       return <h2>Loading ....</h2>
     }
-    if(isError){
+    if(isError || getCommenterror || error){
       return (
       <>
-       <SinglePostHeaderComponent userId={post.userId._id} channelId={post.channelId._id} channelName={post.channelId.channelName} channelImageLocation={post.channelId.channelImageLocation}/>
+        <GoBackComponent/> 
        <h1>{error.message}</h1>
       </>
       )
     }
 
-
- 
-
-
-
-
-
   return (
     <div className="chat">
-     
-{/*      <SinglePostHeaderComponent userId={post.userId._id} channelId={post.channelId._id} channelName={post.channelId.channelName} channelImageLocation={post.channelId.channelImageLocation}/>
- */}
+        <GoBackComponent /> 
         <div className="chat__body" >
-          <PostComponent post={post} userInfo={post.userId}/> 
+          <PostComponent post={post} userInfo={post.userId} singlePost={true}/>
 
         {
             comments && comments.map((msg,index)=>(<ChatMessageComponent key={Date.now()+index} msg={msg} index={index} />)) 
         }
        
         </div>
-       
- 
-
        {/*  footer */}
-        <div className="chat__footer">
+       {post&&( <div className="chat__footer">
             <form onSubmit={e=>{
             e.preventDefault()
-            handleAddComment(e)
+            handleAddComment()
             }}>
               <input  ref={inputRef} placeholder='Add comment' type="text"/>
               <button   type="submit" />
             </form>
-        </div>
+        </div>)}
     </div>
   )
 }
 
-export default SinglePostComponent
+export default SingleShowSinglePost

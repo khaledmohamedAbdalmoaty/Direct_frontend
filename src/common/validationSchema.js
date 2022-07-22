@@ -28,3 +28,49 @@ export const loginValidationSchema=yup.object({
     .required('Password is required')
 
 });
+
+
+
+export const CreateChannelSchema=yup.object({
+  channelName: yup
+    .string('Enter your channel name')
+    .required('channel name is required'),
+    priority: yup
+    .string('Enter channel priority number ')
+    .required('priority is required'),
+
+});
+
+
+export const changePriorityNumberScheam=yup.object({
+    priority: yup
+    .string('Enter channel priority number ')
+    .required('priority is required'),
+
+});
+
+
+export const AddProjectCardSchema=yup.object({
+   projectName: yup
+  .string('Enter project Name ')
+  .required('project Name  is required'),
+
+});
+
+
+export const AddSchoolCardSchema=yup.object({
+  schoolName: yup
+ .string('Enter School Name ')
+ .required('School Name   is required'),
+
+});
+
+export const SendEmailSchema=yup.object({
+  headerTitle: yup
+ .string('Enter header of Email ')
+ .required('Email header title is required'),
+ emailBody: yup
+ .string('Enter your Email body  ')
+ .required('Email body is required')
+
+});

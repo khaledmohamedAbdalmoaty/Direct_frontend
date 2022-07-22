@@ -1,5 +1,21 @@
 #!/bin/bash
 kill -9 $(lsof -i:3000 |  awk '{print $2}')
 
-npm start
-#yarn start 
+#npm start
+yarn start 
+
+
+
+to be able to run the code you should have 
+1. install nodejs 
+2. install yarn 
+3. donwload node_modules 
+
+
+
+in case you will use yarn 
+
+yarn install 
+yarn start => relate to front-end 
+yarn start => related to backend 
+

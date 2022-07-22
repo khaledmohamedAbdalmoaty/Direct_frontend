@@ -13,7 +13,7 @@ import './Chat.css'
 /* -------------------------------------------------------------------------- */
 import SearchComponent from '../SearchComponent'
 import UploadImageComponent from './UploadImageComponent'
-import ShowListComponent from '../ShowListComponent'
+import ShowListComponent from '../../../common/ShowListComponent'
 import CreatePostComponent from './CreatePostComponent'
 /* -------------------------------------------------------------------------- */
 /*                       import things related to mui.v5                      */

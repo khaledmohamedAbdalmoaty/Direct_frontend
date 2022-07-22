@@ -25,7 +25,7 @@ export default function LoginRight() {
         if (password!== confirmPassword) {
           return setMessage({msg:"Passwords do not match",state:false})
         }
-        setLoading(true)
+       setLoading(true)
        registerRequest(setMessage,setLoading,
         userName,
        email,

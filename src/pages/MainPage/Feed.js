@@ -8,23 +8,21 @@ import PostComponent from '../channelPages/chatPage/PostComponent'
 /* -------------------------------------------------------------------------- */
 /*                     import things related to api folder                    */
 /* -------------------------------------------------------------------------- */
-import  useGetChannelConversationl from '../../api/getConversation.api'
-import useAddNewConversationMsg from '../../api/SendConversatonMsg.api'
+
 import {useGetMainPagePosts} from "../../api"
 
 /* -------------------------------------------------------------------------- */
 /*                         import things from context                         */
 /* -------------------------------------------------------------------------- */
 
-import {initialState, actionTypes} from "../../contexts"
+import {initialState, actionTypes,useStateValue} from "../../contexts"
 
 
 
 const Feed = () => {
-  const userId=initialState.user.user_id
-  console.log(`get userId${userId}`)
+  const [{user},dispatch]=useStateValue()
+  const userId=JSON.parse(localStorage.getItem('currentUserInfo')).user_id
   if(!userId)return (<h1>username is not exist</h1> )
- /*  const {data:conversation,isLoading,isFetching,error,isError,refetch}=useGetMainPagePosts(userId) */
  const {data:conversation,isLoading,isFetching,error,isError,refetch}=useGetMainPagePosts(userId)
  
    
@@ -44,7 +42,7 @@ const Feed = () => {
   {
      
      conversation.map((post,index)=>(
-      (<PostComponent key={Date.now()+index} post={post} userInfo={post.userId}/>) 
+      (<PostComponent key={"skjivn@!nca*"+index} post={post} userInfo={post.userId}/>) 
     
     ))
     
