@@ -1,6 +1,7 @@
 node_modules/
 try.css
 try.js
+.env.local
 
 
 
