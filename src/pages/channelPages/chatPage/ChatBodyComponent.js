@@ -35,7 +35,9 @@ const ChatBodyComponent = ({conversation,channelOwner,channelId,isSubScribe}) =>
   return (
     <>
     <div className="chat__body" >
+      
     {
+      
      conversation.map((msg,index)=>(
       (msg.postEnable && msg.post) ? 
       (<PostComponent msg={msg} isSubScribe={isSubScribe} key={'jaa8fhavadfei8892823'+index} post={msg.post} userInfo={msg.whoSendMsg}/>)  : 

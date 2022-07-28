@@ -130,16 +130,19 @@ export default function ShowListComponent({options,userInfo,post,msg,msgChannelO
 
   return (
     <>
-      <IconButton
-        aria-label="more"
-        id="long-button"
-        aria-controls={open ? 'long-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-         <MoreVertIcon />
-      </IconButton>
+      <>
+        <IconButton
+          aria-label="more"
+          id="long-button"
+          aria-controls={open ? 'long-menu' : undefined}
+          aria-expanded={open ? 'true' : undefined}
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <><MoreVertIcon /></>
+          
+        </IconButton>
+      </>
       <Menu
         id="long-menu"
         MenuListProps={{

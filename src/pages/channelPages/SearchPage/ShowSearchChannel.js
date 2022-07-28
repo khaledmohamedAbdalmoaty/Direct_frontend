@@ -73,7 +73,7 @@ return (
 
         {
           searchResult[0]&&searchResult.map((channel,index)=>(
-            <ShowSidebarChannelComponent  channel={channel} index={index+"klsjflkjasldfvn^"}/>
+            <ShowSidebarChannelComponent key={"lskjdflajsldfj"+index}  channel={channel} index={index+"klsjflkjasldfvn^"}/>
           ))
         }
     </div>

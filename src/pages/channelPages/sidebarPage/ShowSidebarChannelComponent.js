@@ -11,8 +11,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 export default function ShowSidebarChannelComponent({channel}) {
     let nav=useNavigate()
- 
-  const {channelName,_id:id}=channel
+  if(!channel){
+    return <h5>Channel Deleted </h5>
+  }
+  const {channelName,_id:id}=channel&&channel
   const channelOwner=channel.channelOwner&&channel.channelOwner._id
 
   const selectChannel = () => {
